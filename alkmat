@@ -1,0 +1,33 @@
+
+[a,b,c] = kek([-3 0 1]);
+A = [-3,0,4;1,-1,2;-2,1,-2];
+
+C = [1,0.99;0.99,0.98];
+
+g = [1.98;1.98];
+
+e = C\g
+
+h = hilb(6)
+B = rand(6)
+
+
+t = cond(h)
+Bt = cond(B)
+
+% [c,z] = mnorm(A)
+% 
+% j = normest(A)
+
+function [n1,n2,nv]=kek(x)
+    n1 = sum(abs(x));
+    n2 = sqrt(sum(x.^2));
+    nv = max(abs(x));
+end
+
+function [n1,nv] = mnorm(d)
+    n1 = max(sum(abs(d)));
+    nv = max(sum(abs(d),2));
+end
+    
+
