@@ -1,0 +1,46 @@
+select round(avg(ar)) from konyvtar.konyv;
+
+select min(ar),max(ar) from konyvtar.konyv;
+
+select sum(oldalszam),count(cim) from konyvtar.konyv;
+select count(*) from konyvtar.konyv;
+select tema from konyvtar.konyv group by tema;
+
+select round(avg(ar)),kiado from konyvtar.konyv where kiado is not null group by kiado order by 1; 
+select tema,count(tema) from konyvtar.konyv group by tema order by 2;
+select besorolas,count(besorolas), sum(tagdij) from konyvtar.tag group by besorolas;
+
+select tema, round(avg(ar)) as atlag from konyvtar.konyv group by tema having count(*)>1 and tema is not null; 
+
+select tema,min(ar) from  konyvtar.konyv group by tema having min(ar) > 1450;
+
+select besorolas, round(avg(hany_napra),2) as atlag from konyvtar.tag kt inner join konyvtar.kolcsonzes kcs
+on kt.olvasojegyszam = kcs.tag_azon
+group by besorolas having avg(hany_napra) >= 100;
+
+select vezeteknev || ' ' || keresztnev nev, min(oldalszam) from konyvtar.szerzo ksz inner join KONYVTAR.konyvszerzo kksz using (szerzo_azon)
+inner join konyvtar.konyv k using (konyv_azon)
+group by vezeteknev || ' ' || keresztnev
+order by nev;
+
+select besorolas,avg(kesedelmi_dij) from konyvtar.tag tg inner join konyvtar.kolcsonzes kcs on tg.olvasojegyszam = kcs.tag_azon
+where cim like '_____Debrecen%'
+group by besorolas;
+
+
+select tema, count(*) from konyvtar.tag tg inner join konyvtar.kolcsonzes kcs on tg.olvasojegyszam = kcs.tag_azon
+inner join konyvtar.konyvtari_konyv ktk using(leltari_szam)
+inner join konyvtar.konyv k using (konyv_azon)
+where (months_between(sysdate,szuletesi_datum)/12) > 30
+group by tema;
+
+select distinct cim from konyvtar.konyv inner join konyvtar.konyvtari_konyv using (konyv_azon)
+inner join konyvtar.kolcsonzes using (leltari_szam)
+where to_char(kolcsonzesi_datum,'YYYY') = '2015';
+
+
+select tema,count(*) from konyvtar.konyv inner join konyvtar.konyvtari_konyv using (konyv_azon)
+inner join konyvtar.kolcsonzes using (leltari_szam)
+where to_char(kolcsonzesi_datum,'YYYY') = '2015' or to_char(kiadas_datuma,'YYYY') between 1990 and 2000
+group by tema;
+
